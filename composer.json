@@ -18,7 +18,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modulos\\PMM\\Semsur\\": "modulos/pmm@semsur"
+            "ModularPHP\\Modulos\\PMM\\Semsur\\": "ModularPHP/modulos/pmm.semsur"
         }
     },
     "autoload-dev": {

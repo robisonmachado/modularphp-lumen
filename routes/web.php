@@ -3,7 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use Illuminate\Support\Facades\Route;
-use Modulos\PMM\Semsur\Controllers\TesteController;
+use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 
 //use Modulos\PMM\Semsur\Controllers\TesteController;
 
@@ -27,14 +27,14 @@ $router->get('/', function () use ($router) {
 
 
 // É NECESSÁRIO DECLARAR O NAMESPACE DOS CONTROLES QUE NÃO SEJAM DO NAMESPACE DEFAULT (APP/CONTROLLERS)
-Route::group(['namespace' => '\Modulos\PMM\Semsur\Controllers'], function($router)
+Route::group(['namespace' => '\ModularPHP\Modulos\PMM\Semsur\Controllers'], function($router)
 {
     $router->get('/teste', \TesteController::class.'@teste');
 
 });
 
 
-Route::group(['namespace' => '\Modulos\PMM\Semsur', 'prefix' => 'modulos/pmm/semsur'], function($router)
+Route::group(['namespace' => '\ModularPHP\\Modulos\PMM\Semsur', 'prefix' => 'modulos/pmm/semsur'], function($router)
 {
     $router->get('/login', \Controllers\TesteController::class.'@teste');
 
