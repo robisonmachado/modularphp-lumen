@@ -18,11 +18,11 @@ use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 |
 */
 
-$router->get('/', function () use ($router) {
+/* $router->get('/', ['middleware' => 'auth'], function () use ($router) {
     $teste = new TesteController;
     print_r($teste);
     //return $router->app->version();
-});
+}); */
 
 
 
