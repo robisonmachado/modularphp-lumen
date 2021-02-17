@@ -18,25 +18,33 @@ use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 |
 */
 
-/* $router->get('/', ['middleware' => 'auth'], function () use ($router) {
-    $teste = new TesteController;
-    print_r($teste);
-    //return $router->app->version();
-}); */
+// JWT API ROUTES
+$router->get('api/login', function () use ($router) {
+    return ["status" => "accepted"];
+});
+
+Route::group([
+    'prefix' => 'api',
+    'middleware' => 'auth'
+], function($router)
+    {
+
+
+
+    }
+);
+
 
 
 
 // É NECESSÁRIO DECLARAR O NAMESPACE DOS CONTROLES QUE NÃO SEJAM DO NAMESPACE DEFAULT (APP/CONTROLLERS)
-Route::group(['namespace' => '\ModularPHP\Modulos\PMM\Semsur\Controllers'], function($router)
-{
-    $router->get('/teste', \TesteController::class.'@teste');
+Route::group([
+        'namespace' => '\ModularPHP\\Modulos\PMM\Semsur',
+        'prefix' => 'modulos/pmm/semsur'
+    ], function($router)
+    {
+        $router->get('/login', \Controllers\TesteController::class.'@teste');
 
-});
-
-
-Route::group(['namespace' => '\ModularPHP\\Modulos\PMM\Semsur', 'prefix' => 'modulos/pmm/semsur'], function($router)
-{
-    $router->get('/login', \Controllers\TesteController::class.'@teste');
-
-});
+    }
+);
 

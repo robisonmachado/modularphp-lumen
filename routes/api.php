@@ -16,9 +16,11 @@ use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 |
 */
 
-$router->get('/', ['middleware' => 'auth:api'], function () use ($router) {
-    $teste = new TesteController;
-    print_r($teste);
+$router->get('/', function () use ($router) {
+
+    var_dump("API FUNCIONANDO");
+    //$teste = new TesteController;
+    //print_r($teste);
     //return $router->app->version();
 });
 
