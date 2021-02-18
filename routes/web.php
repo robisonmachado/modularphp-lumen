@@ -3,6 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use Illuminate\Support\Facades\Route;
+
 use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 
 //use Modulos\PMM\Semsur\Controllers\TesteController;
@@ -18,22 +19,6 @@ use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 |
 */
 
-// JWT API ROUTES
-$router->get('api/login', function () use ($router) {
-    return ["status" => "accepted"];
-});
-
-Route::group([
-    'prefix' => 'api',
-    'middleware' => 'auth'
-], function($router)
-    {
-
-
-
-    }
-);
-
 
 
 
@@ -43,7 +28,7 @@ Route::group([
         'prefix' => 'modulos/pmm/semsur'
     ], function($router)
     {
-        $router->get('/login', \Controllers\TesteController::class.'@teste');
+        $router->get('/teste', \Controllers\TesteController::class.'@teste');
 
     }
 );

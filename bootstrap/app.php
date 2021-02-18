@@ -60,11 +60,10 @@ $app->singleton(
 */
 
 $app->configure('app');
+$app->configure('auth');
 
 // JWT
 $app->configure('jwt');
-
-$app->configure('auth');
 
 /*
 |--------------------------------------------------------------------------
@@ -119,6 +118,14 @@ $app->router->group([
     'namespace' => 'App\Http\Controllers',
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
+});
+
+// rotas da api
+$app->router->group([
+    'namespace' => 'ModularPHP\Core\Controllers',
+    'prefix' => 'api',
+], function ($router) {
+    require __DIR__.'/../routes/api.php';
 });
 
 return $app;

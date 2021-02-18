@@ -8,20 +8,34 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Http\Request;
 use Laravel\Lumen\Auth\Authorizable;
+
 
 
 class Usuario extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
     use Authenticatable, Authorizable, HasFactory;
 
-    public $table = "modularphp.core.UsuarioSistema";
+    public $table = "ModularPHP@Usuarios";
 
     protected $fillable = [
-        'nome', 'senha', 'email'
+        'nome', 'senha', 'cpf','matricula', 'email', 'telefone1', 'telefone2', 'país',
+        'uf', 'cidade', 'localidade', 'logradouro', 'cep'
     ];
 
-    protected $hidden = ["senha"];
+    protected $hidden = ['senha', 'remember_token',];
+
+    public function getAuthPassword()
+    {
+        return $this->senha;
+    }
+
+    /* public function getAuthIdentifierName()
+    {
+        return 'cpf';
+    } */
+
 
     public function getJWTIdentifier()
     {

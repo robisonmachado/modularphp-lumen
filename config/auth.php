@@ -1,12 +1,14 @@
 <?php
 
+use App\Models\User;
 use ModularPHP\Core\Models\Usuario;
 
 return [
 
     'defaults' => [
         'guard' => 'api',
-        'passwords' => 'users',
+        //'passwords' => 'users',
+        //'passwords' => 'ModularPHPUsuarios',
     ],
 
 
@@ -16,13 +18,22 @@ return [
             'driver' => 'jwt',
             'provider' => 'users',
         ],
+
     ],
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => Usuario::class,
-        ],
+            'users' => [
+                'driver' => 'ModularPHPUsuarios',
+                'model' => Usuario::class,
+            ],
 
-    ]
+    ],
+
+    /* 'passwords' => [
+        'ModularPHPSenhasUsuarios' => [
+            'provider' => 'ModularPHPUsuarios',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+    ], */
 ];

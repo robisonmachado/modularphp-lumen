@@ -16,9 +16,9 @@ class AuthWebController extends Controller
      */
     public function authenticate(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credenciais = $request->only('email', 'password');
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($credenciais)) {
             $request->session()->regenerate();
 
             return redirect()->intended('dashboard');

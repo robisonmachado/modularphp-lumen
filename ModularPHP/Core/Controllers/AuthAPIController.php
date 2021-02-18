@@ -5,11 +5,16 @@ namespace ModularPHP\Core\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use ModularPHP\Core\Models\Usuario;
+use Tymon\JWTAuth\JWTAuth;
 
 class AuthAPIController extends Controller
 {
-    public function __construct()
+    protected $jwtAuth;
+    public function __construct(JWTAuth $jwtAuth)
     {
+        $this->jwtAuth = $jwtAuth;
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
@@ -18,12 +23,35 @@ class AuthAPIController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        /* return json_encode([
+            "action" => "login",
+            "data" => $request->all(),
+        ]); */
 
-        if (! $token = Auth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+        $credenciais = $request->only(['cpf', 'senha']);
+
+        //return var_dump(auth('api')->attempt($credenciais));
+
+        $user = Usuario::where('cpf', $request->input('cpf'))->first();
+        //dd($user);
+
+
+        /* if (Hash::check($credenciais['senha'], $bdSenha)) {
+            $teste = "senhas conferem";
+        } */
+
+        $token = auth('api')->attempt([
+            "cpf" => $credenciais['cpf'],
+            "senha" => $credenciais['senha'],
+        ]);
+        if (! $token) {
+            return response()->json([
+                'error' => 'Unauthorized',
+                'token' => $token,
+                'request' => $request->all(),
+            ], 401);
         }
 
         return $this->respondWithToken($token);
