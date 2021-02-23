@@ -2,6 +2,7 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 
@@ -12,7 +13,10 @@ Route::group([
 {
     $router->get('/', function () use ($router) {
 
-        return ["mensagem" => "API FUNCIONANDO 2"];
+        return [
+            "mensagem" => "API FUNCIONANDO",
+            "Usuário" => Auth::user()
+        ];
     });
 
 
@@ -22,6 +26,8 @@ Route::group([
 
 // JWT API ROUTES
 $router->get('login', AuthAPIController::class.'@login');
+$router->get('refresh', AuthAPIController::class.'@refresh');
+$router->get('logout', AuthAPIController::class.'@logout');
 
 
 

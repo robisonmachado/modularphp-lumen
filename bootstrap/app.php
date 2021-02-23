@@ -48,6 +48,14 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+/* $app->singleton(Illuminate\Session\SessionManager::class, function () use ($app) {
+    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session');
+});
+
+$app->singleton('session.store', function () use ($app) {
+    return $app->loadComponent('session', Illuminate\Session\SessionServiceProvider::class, 'session.store');
+}); */
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -79,6 +87,10 @@ $app->configure('jwt');
 // $app->middleware([
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
+$app->middleware([
+    Illuminate\Session\Middleware\StartSession::class
+]);
+
 
 $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
@@ -99,6 +111,15 @@ $app->register(App\Providers\AppServiceProvider::class);
 $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 
+// Register SessionServiceProvider
+$app->register(Illuminate\Session\SessionServiceProvider::class);
+// Load session related configuration
+$app->configure('session');
+// Set session alias
+$app->alias('session', 'Illuminate\Session\SessionManager');
+
+
+
 // JWT
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
@@ -115,7 +136,9 @@ $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 */
 
 $app->router->group([
-    'namespace' => 'App\Http\Controllers',
+    //'namespace' => 'App\Http\Controllers',
+    //'middleware' => 'auth:api'
+    //'middleware' => 'web'
 ], function ($router) {
     require __DIR__.'/../routes/web.php';
 });

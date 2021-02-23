@@ -11,23 +11,26 @@ use Illuminate\Support\Str;
 
 class ModularPHPAuthUserProvider extends EloquentUserProvider
 {
-   public function validateCredentials(UserContract $user, array $credenciais)
-   {
-       $senha = $credenciais['senha'];
+    //protected $user;
 
-       return $this->hasher->check($senha, $user->getAuthPassword());
+    public function validateCredentials(UserContract $user, array $credenciais)
+    {
+        $this->user = $user;
+        $senha = $credenciais['senha'];
 
-       /* if (Hash::check($senha, $user->senha)){
-           return true;
-       } else {
-           return false;
-       } */
+        return $this->hasher->check($senha, $user->getAuthPassword());
+
+        /* if (Hash::check($senha, $user->senha)){
+            return true;
+        } else {
+            return false;
+        } */
 
 
-       // caso queira continuar autenticando pelo modo padrao do Laravel
-       // ou seja, validar dos dois modos, utilize a linha de codigo abaixo
-       // return parent::validateCredentials($user, $credentials);
-   }
+        // caso queira continuar autenticando pelo modo padrao do Laravel
+        // ou seja, validar dos dois modos, utilize a linha de codigo abaixo
+        // return parent::validateCredentials($user, $credentials);
+    }
 
    /**
      * Retrieve a user by the given credentials.
@@ -61,6 +64,23 @@ class ModularPHPAuthUserProvider extends EloquentUserProvider
         }
 
         return $query->first();
+    }
+
+    public function retrieveByToken($identifier, $token) {
+        //dd([$identifier, $token]);
+
+        $query = $this->newModelQuery();
+        $user = $query->where($identifier, $token)->first();
+
+        //dd($resultado);
+		//$user = $this->user->where($identifier, $token)->first();
+
+		return $user;
+	}
+
+    public function retrieveById ($identifier) {
+        $query = $this->newModelQuery();
+        return $query->find($identifier);
     }
 
 }

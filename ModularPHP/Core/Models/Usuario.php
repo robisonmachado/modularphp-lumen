@@ -21,10 +21,10 @@ class Usuario extends Model implements AuthenticatableContract, AuthorizableCont
 
     protected $fillable = [
         'nome', 'senha', 'cpf','matricula', 'email', 'telefone1', 'telefone2', 'país',
-        'uf', 'cidade', 'localidade', 'logradouro', 'cep'
+        'uf', 'cidade', 'localidade', 'logradouro', 'cep',
     ];
 
-    protected $hidden = ['senha', 'remember_token',];
+    protected $hidden = ['senha', 'access_token', 'remember_token'];
 
     public function getAuthPassword()
     {

@@ -3,10 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use Illuminate\Support\Facades\Route;
-
-use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
-
-//use Modulos\PMM\Semsur\Controllers\TesteController;
+//use \ModularPHP\Core\Controllers\AuthWebController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,16 +16,21 @@ use ModularPHP\Modulos\PMM\Semsur\Controllers\TesteController;
 |
 */
 
+Route::get('modulos/pmm/semsur/formulario_login', \ModularPHP\Core\Controllers\AuthWebController::class.'@mostrarFormularioLogin');
+Route::post('modulos/pmm/semsur/login', \ModularPHP\Core\Controllers\AuthWebController::class.'@login');
 
 
 
 // É NECESSÁRIO DECLARAR O NAMESPACE DOS CONTROLES QUE NÃO SEJAM DO NAMESPACE DEFAULT (APP/CONTROLLERS)
 Route::group([
-        'namespace' => '\ModularPHP\\Modulos\PMM\Semsur',
-        'prefix' => 'modulos/pmm/semsur'
+        //'namespace' => '\ModularPHP\\Modulos\PMM\Semsur',
+        'prefix' => 'modulos/pmm/semsur',
+        'middleware' => 'auth:session_token'
     ], function($router)
     {
-        $router->get('/teste', \Controllers\TesteController::class.'@teste');
+        Route::get('/logout', \ModularPHP\Core\Controllers\AuthWebController::class.'@logout');
+        Route::get('/dashboard', \ModularPHP\Core\Controllers\AuthWebController::class.'@dashboard');
+        Route::get('/teste', \ModularPHP\Core\Controllers\AuthWebController::class.'@teste');
 
     }
 );

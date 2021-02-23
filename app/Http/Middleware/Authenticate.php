@@ -3,7 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Contracts\Auth\Factory as Auth;
+use Illuminate\Contracts\Auth\Factory as AuthFactory;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate
 {
@@ -20,7 +21,7 @@ class Authenticate
      * @param  \Illuminate\Contracts\Auth\Factory  $auth
      * @return void
      */
-    public function __construct(Auth $auth)
+    public function __construct(AuthFactory $auth)
     {
         $this->auth = $auth;
     }
@@ -36,10 +37,22 @@ class Authenticate
     public function handle($request, Closure $next, $guard = null)
     {
         //return "Autenticate Middleware";
+        //dd(session()->all());
+
+
         if ($this->auth->guard($guard)->guest()) {
-            return response('Unauthorized.', 401);
+            return response('NÃO AUTORIZADO', 401);
         }
+
+        if(! Auth::user()){
+            //dd(Auth::guard('session_token')->user());
+            Auth::login( Auth::guard('session_token')->user() );
+        }
+
+
 
         return $next($request);
     }
+
+
 }

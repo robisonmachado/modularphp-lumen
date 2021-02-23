@@ -16,7 +16,13 @@ return [
     'guards' => [
         'api' => [
             'driver' => 'jwt',
-            'provider' => 'users',
+            'provider' => 'ModularPHPUsuariosProvider',
+        ],
+
+        'session_token' => [
+            'driver' => 'session_token',
+            'provider' => 'ModularPHPUsuariosProvider',
+            'model' => Usuario::class,
         ],
 
     ],
@@ -24,6 +30,10 @@ return [
     'providers' => [
             'users' => [
                 'driver' => 'ModularPHPUsuarios',
+                'model' => Usuario::class,
+            ],
+            'ModularPHPUsuariosProvider' => [
+                'driver' => 'ModularPHPUsuariosDriver',
                 'model' => Usuario::class,
             ],
 

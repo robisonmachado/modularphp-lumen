@@ -15,7 +15,7 @@ class AuthAPIController extends Controller
     public function __construct(JWTAuth $jwtAuth)
     {
         $this->jwtAuth = $jwtAuth;
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login', 'refresh']]);
     }
 
     /**
@@ -25,34 +25,24 @@ class AuthAPIController extends Controller
      */
     public function login(Request $request)
     {
-        /* return json_encode([
-            "action" => "login",
-            "data" => $request->all(),
-        ]); */
 
         $credenciais = $request->only(['cpf', 'senha']);
 
         //return var_dump(auth('api')->attempt($credenciais));
 
-        $user = Usuario::where('cpf', $request->input('cpf'))->first();
-        //dd($user);
-
-
-        /* if (Hash::check($credenciais['senha'], $bdSenha)) {
-            $teste = "senhas conferem";
-        } */
-
-        $token = auth('api')->attempt([
-            "cpf" => $credenciais['cpf'],
-            "senha" => $credenciais['senha'],
-        ]);
+        $token = Auth::attempt($credenciais);
         if (! $token) {
             return response()->json([
-                'error' => 'Unauthorized',
+                'error' => 'NÃO AUTORIZADO',
                 'token' => $token,
                 'request' => $request->all(),
             ], 401);
         }
+
+        //return Auth::user()->update(['access_token' => $token]);
+
+        Auth::user()->access_token = $token;
+        Auth::user()->save();
 
         return $this->respondWithToken($token);
     }
@@ -62,7 +52,7 @@ class AuthAPIController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function me()
+    public function usuario()
     {
         return response()->json(auth()->user());
     }
@@ -74,9 +64,12 @@ class AuthAPIController extends Controller
      */
     public function logout()
     {
+        Auth::user()->access_token = null;
+        Auth::user()->save();
+
         Auth::logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['mensagem' => 'DESLOGADO COM SUCESSO']);
     }
 
     /**
@@ -86,7 +79,18 @@ class AuthAPIController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(Auth::refresh());
+        $token = null;
+
+        try {
+            $token = Auth::refresh();
+        } catch (\Throwable $th) {
+            return response()->json(['mensagem' => 'NÃO AUTORIZADO'], 401);
+        }
+
+        auth()->user()->access_token = $token;
+        auth()->user()->save();
+
+        return $this->respondWithToken($token);
     }
 
     /**

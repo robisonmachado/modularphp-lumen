@@ -14,21 +14,48 @@ class AuthWebController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
-        $credenciais = $request->only('email', 'password');
+        session()->flush();
+        $credenciais = $request->only('cpf', 'senha');
 
-        if (Auth::attempt($credenciais)) {
+        $token = Auth::attempt($credenciais);
+        if($token){
             $request->session()->regenerate();
-
-            return redirect()->intended('dashboard');
+            Auth::user()->access_token = $token;
+            Auth::user()->save();
+            session([
+                'access_token' => $token,
+                ]);
+            return redirect('/modulos/pmm/semsur/dashboard');
+        }else{
+            return response()->json(['mensagem' => 'ERRO AO FAZER LOGIN']);
         }
-
-        /* return back()->withErrors([
-            'email' => 'The provided credentials do not match our records.',
-        ]); */
-        return [
-            'email' => 'The provided credentials do not match our records.',
-        ];
     }
+
+    public function mostrarFormularioLogin(){
+        return view('pmm@semsur.formulario_login');
+    }
+
+    public function dashboard(){
+        return view('pmm@semsur.dashboard');
+    }
+
+    public function teste(){
+        //return response()->json(session()->all());
+        //$usuario = session('usuario');
+        return view('pmm@semsur.teste');
+    }
+
+    public function logout(){
+        //return response()->json(session()->all());
+        //$usuario = session('usuario');
+        dd(Auth::user());
+        session()->flush();
+        Auth::logout();
+
+        return redirect('/modulos/pmm/semsur/formulario_login');
+    }
+
+
 }
