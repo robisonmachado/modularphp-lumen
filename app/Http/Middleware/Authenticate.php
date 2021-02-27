@@ -37,11 +37,12 @@ class Authenticate
     public function handle($request, Closure $next, $guard = null)
     {
         //return "Autenticate Middleware";
-        //dd(session()->all());
+        //dd($guard);
 
 
         if ($this->auth->guard($guard)->guest()) {
-            return response('NÃO AUTORIZADO', 401);
+            if('session_token' === $guard) return redirect('/');
+            else return response('NÃO AUTORIZADO', 401);
         }
 
         if(! Auth::user()){

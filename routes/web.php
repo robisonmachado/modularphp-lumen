@@ -3,6 +3,9 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 use Illuminate\Support\Facades\Route;
+use ModularPHP\Modulos\PMM\Semsur\Almoxarifado\Controllers\AlmoxarifadoController;
+use ModularPHP\Modulos\PMM\Semsur\Controllers\DashboardSemsurController;
+
 //use \ModularPHP\Core\Controllers\AuthWebController;
 
 /*
@@ -16,21 +19,46 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('modulos/pmm/semsur/formulario_login', \ModularPHP\Core\Controllers\AuthWebController::class.'@mostrarFormularioLogin');
-Route::post('modulos/pmm/semsur/login', \ModularPHP\Core\Controllers\AuthWebController::class.'@login');
+Route::get('/teste', function (){
+    return view("teste-mix");
+});
+
+
+Route::get('/', \ModularPHP\Core\Controllers\AuthWebController::class.'@mostrarFormularioLogin');
+Route::post('/login', \ModularPHP\Core\Controllers\AuthWebController::class.'@login');
+Route::get('/formulario-login-almoxarifado', AlmoxarifadoController::class.'@formularioLoginAlmoxarifado');
+
+Route::group([
+    'middleware' => ['auth:session_token']
+], function($router)
+{
+    Route::get('public/dashboard-html/public/index.html', function (){
+        dd('dash');
+        //return redirect('/dashboard-html/public/');
+    });
+
+    Route::get('/logout', \ModularPHP\Core\Controllers\AuthWebController::class.'@logout');
+
+    Route::get('/dashboard', DashboardSemsurController::class.'@index');
+    Route::get('/dashboard/forms', DashboardSemsurController::class.'@forms');
+
+
+
+
+
+});
+
+
 
 
 
 // É NECESSÁRIO DECLARAR O NAMESPACE DOS CONTROLES QUE NÃO SEJAM DO NAMESPACE DEFAULT (APP/CONTROLLERS)
 Route::group([
-        //'namespace' => '\ModularPHP\\Modulos\PMM\Semsur',
-        'prefix' => 'modulos/pmm/semsur',
         'middleware' => 'auth:session_token'
     ], function($router)
     {
-        Route::get('/logout', \ModularPHP\Core\Controllers\AuthWebController::class.'@logout');
-        Route::get('/dashboard', \ModularPHP\Core\Controllers\AuthWebController::class.'@dashboard');
-        Route::get('/teste', \ModularPHP\Core\Controllers\AuthWebController::class.'@teste');
+        //Route::get('/dashboard', \ModularPHP\Core\Controllers\AuthWebController::class.'@dashboard');
+        //Route::get('/teste', \ModularPHP\Core\Controllers\AuthWebController::class.'@teste');
 
     }
 );

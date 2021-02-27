@@ -22,8 +22,10 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
             "ModularPHP\\Core\\": "ModularPHP/Core/",
-            "ModularPHP\\Modulos\\PMM\\Semsur\\": "ModularPHP/modulos/pmm.semsur/"
-        }
+            "ModularPHP\\Modulos\\PMM\\Semsur\\": "ModularPHP/modulos/pmm.semsur/",
+            "ModularPHP\\Modulos\\PMM\\Semsur\\Almoxarifado\\": "ModularPHP/modulos/pmm.semsur.almoxarifado/"
+        },
+        "files": ["ModularPHP/modularphp.config.php"]
     },
     "autoload-dev": {
         "classmap": [

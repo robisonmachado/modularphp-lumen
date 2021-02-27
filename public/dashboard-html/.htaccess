@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    <IfModule mod_negotiation.c>
+        Options -MultiViews -Indexes
+    </IfModule>
+
+
+    Options +FollowSymLinks
+    RewriteEngine On
+
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+	RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+
+	RewriteRule ^.*$ - [NC,L]
+	RewriteRule ^(.*) index.html [NC,L]
+
+
+</IfModule>

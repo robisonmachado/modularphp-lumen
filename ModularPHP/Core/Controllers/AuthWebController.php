@@ -18,6 +18,7 @@ class AuthWebController extends Controller
     {
         session()->flush();
         $credenciais = $request->only('cpf', 'senha');
+        //dd($credenciais);
 
         $token = Auth::attempt($credenciais);
         if($token){
@@ -27,34 +28,27 @@ class AuthWebController extends Controller
             session([
                 'access_token' => $token,
                 ]);
-            return redirect('/modulos/pmm/semsur/dashboard');
+
+            return redirect('/dashboard');
         }else{
             return response()->json(['mensagem' => 'ERRO AO FAZER LOGIN']);
         }
     }
 
     public function mostrarFormularioLogin(){
-        return view('pmm@semsur.formulario_login');
+        return view('pmm::autenticacao.login');
     }
 
-    public function dashboard(){
-        return view('pmm@semsur.dashboard');
-    }
 
-    public function teste(){
-        //return response()->json(session()->all());
-        //$usuario = session('usuario');
-        return view('pmm@semsur.teste');
-    }
 
     public function logout(){
         //return response()->json(session()->all());
         //$usuario = session('usuario');
-        dd(Auth::user());
+        //dd(Auth::user());
         session()->flush();
         Auth::logout();
 
-        return redirect('/modulos/pmm/semsur/formulario_login');
+        return redirect('/');
     }
 
 

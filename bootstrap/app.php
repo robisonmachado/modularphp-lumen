@@ -1,5 +1,8 @@
 <?php
 
+use ModularPHP\Core\Middlewares\RedirectGuestToLoginPage;
+use ModularPHP\Core\Providers\ModularPHPServiceProvider;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
@@ -94,6 +97,7 @@ $app->middleware([
 
 $app->routeMiddleware([
      'auth' => App\Http\Middleware\Authenticate::class,
+     'redirectguest' => RedirectGuestToLoginPage::class,
 ]);
 
 /*
@@ -123,6 +127,8 @@ $app->alias('session', 'Illuminate\Session\SessionManager');
 // JWT
 $app->register(Tymon\JWTAuth\Providers\LumenServiceProvider::class);
 
+//ModularPHP Service Provider
+$app->register(ModularPHPServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
